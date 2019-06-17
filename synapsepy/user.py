@@ -551,7 +551,7 @@ class User():
 		response = self._do_request(self.http.delete, path)
 		return response
 
-	def dummy_tran(self, node_id, subnet_id=None, type=None, is_credit=False, foreign_transaction=False):
+	def dummy_tran(self, node_id, subnet_id=None, type=None, is_credit=False, foreign_transaction=False, amount=0):
 		'''Trigger external dummy transactions on deposit or card accounts
 		Args:
 			node_id (str): ID of the from Node
@@ -572,7 +572,7 @@ class User():
 		credit = 'YES' if is_credit else 'NO'
 		foreign = 'YES' if foreign_transaction else 'NO'
 		response = self._do_request(
-			self.http.get, path, subnet_id=subnet_id, type=type, is_credit=credit, foreign_transaction=foreign
+			self.http.get, path, subnet_id=subnet_id, type=type, is_credit=credit, foreign_transaction=foreign, amount=amount
 		)
 		return response
 
