@@ -7,7 +7,7 @@ from . import errors as api_errors
 class HttpClient():
 	"""Handles HTTP requests (including headers) and API errors.
 	"""
-	def __init__(self, client_id, client_secret, fingerprint, ip_address, base_url, logging):
+	def __init__(self, client_id, client_secret, fingerprint, ip_address, base_url, logging, proxies=None, cert=None):
 		self.client_id = client_id
 		self.client_secret = client_secret
 		self.fingerprint = fingerprint
@@ -15,7 +15,12 @@ class HttpClient():
 		self.base_url = base_url
 		self.oauth_key = ''
 		self.idempotency_key = None
+
 		self.session = requests.Session()
+		if proxies is not None:
+			self.session.proxies = proxies
+		self.session.cert = cert
+
 		self.logger = self.get_log(logging)
 
 		self.update_headers()
@@ -139,7 +144,7 @@ class HttpClient():
 
 	def parse_response(self, response):
 		"""Convert successful response to dict or raise error."""
-		
+
 		payload = response.json()
 
 		try:
