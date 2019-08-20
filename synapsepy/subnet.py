@@ -1,10 +1,11 @@
 
 class Subnet():
 
-	def __init__(self, response):
+	def __init__(self, response, full_dehydrate=False):
 		self.id = response['_id']
 		self.user_id = response['user_id']
 		self.node_id = response['node_id']
+		self.full_dehydrate = full_dehydrate
 		self.body = response
 
 class Subnets():

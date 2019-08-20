@@ -598,7 +598,7 @@ class User():
 		response = self._do_request(self.http.post, path, body, idempotency_key=idempotency_key)
 		return Subnet(response)
 
-	def get_subnet(self, node_id, subnet_id):
+	def get_subnet(self, node_id, subnet_id, full_dehydrate=False):
 		'''Retrieves the account and routing numbers on an account
 		Args:
 			node_id (str): ID of the from Node
@@ -606,6 +606,9 @@ class User():
 		Returns:
 			Subnet: Subnet object containing Subnet record
 		'''
+
+		full_d = 'yes' if full_dehydrate else 'no'
+
 		self.logger.debug("Retrieving Subnet info")
 		path = (
 			paths['users']
@@ -618,8 +621,8 @@ class User():
 			+ '/'
 			+ subnet_id
 		)
-		response = self._do_request(self.http.get, path)
-		return Subnet(response)
+		response = self._do_request(self.http.get, path, full_dehydrate=full_d)
+		return Subnet(response, full_dehydrate=full_dehydrate)
 
 	def update_subnet(self, node_id, subnet_id, body):
 		'''Updates the subnet's prefrences
