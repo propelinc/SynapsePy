@@ -16,7 +16,7 @@ import requests
 
 class Client():
 	""" Client Record """
-	def __init__(self, client_id, client_secret, fingerprint, ip_address, devmode=False, logging=False):
+	def __init__(self, client_id, client_secret, fingerprint, ip_address, devmode=False, logging=False, proxies=None, verify=None):
 		"""
 		Args:
 			client_id (str): API client id
@@ -28,18 +28,20 @@ class Client():
 		"""
 		self.client_id = client_id
 		self.client_secret = client_secret
-		
+
 		self.http = HttpClient(
 			client_id=client_id,
 			client_secret=client_secret,
 			fingerprint=fingerprint,
 			ip_address=ip_address,
 			base_url=
-				'https://uat-api.synapsefi.com/v3.1' 
+				'https://uat-api.synapsefi.com/v3.1'
 				if devmode else
 				'https://api.synapsefi.com/v3.1',
-			logging=logging
-			)
+			logging=logging,
+			proxies=proxies,
+			verify=verify,
+		)
 		self.logging = logging
 		self.logger = self.get_log(logging)
 
@@ -78,7 +80,7 @@ class Client():
 		Args:
 			body (dict): user record
 			ip (str): IP address of the user to create
-			fingerprint (str) (opt): device fingerprint of the user 
+			fingerprint (str) (opt): device fingerprint of the user
 			idempotency_key (str): (opt) idempotency key for safely retrying requests
 		Returns:
 			user (User): object containing User record
@@ -101,7 +103,7 @@ class Client():
 		Args:
 			user_id (str): identification for user
 			ip (str) (opt): IP address of the user to create
-			fingerprint (str) (opt): device fingerprint of the user 
+			fingerprint (str) (opt): device fingerprint of the user
 			full_dehydrate (bool) (opt): Full Dehydrate True will return back user's KYC info.
 		Returns:
 			user (User): object containing User record
@@ -117,7 +119,7 @@ class Client():
 		full_d = 'yes' if full_dehydrate else None
 		response = self.http.get(path, full_dehydrate=full_d)
 		return User(response, self.http, full_dehydrate=full_d, logging=self.logging)
-	
+
 	def create_subscription(self, webhook_url, scope, idempotency_key=None):
 		'''Creates a webhook
 		Args:
@@ -242,10 +244,10 @@ class Client():
 		Args:
 			scope (list of str): Scopes that you wish to issue the public keys for
 		Returns:
-			dict: dictionary containing public key info 
+			dict: dictionary containing public key info
 		'''
 		self.logger.debug("issuing a public key")
-		
+
 		path = paths['client']
 
 		response = self.http.get(
@@ -284,7 +286,7 @@ class Client():
 			(Transactions): object containing pagination info and list of Transaction objects
 		'''
 		self.logger.debug("getting all transactions")
-		
+
 		path = paths['trans']
 		response = self.http.get(
 			path, page=page, per_page=per_page
@@ -301,7 +303,7 @@ class Client():
 			(Nodes): object containing pagination info and list of Node objects
 		'''
 		self.logger.debug("getting all nodes")
-		
+
 		path = paths['nodes']
 		response = self.http.get(
 			path, page=page, per_page=per_page, type=type
@@ -317,7 +319,7 @@ class Client():
 			(Subscriptions): object containing pagination info and list of Subscription objects
 		'''
 		self.logger.debug("getting all subscriptions")
-		
+
 		path = paths['subs']
 		response = self.http.get(
 			path, page=page, per_page=per_page
@@ -330,7 +332,7 @@ class Client():
 			dict: dictionary containing institutions
 		'''
 		self.logger.debug("getting all institutions")
-		
+
 		path = paths['inst']
 		response = self.http.get(path)
 		return response
