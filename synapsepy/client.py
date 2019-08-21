@@ -16,7 +16,7 @@ import requests
 
 class Client():
 	""" Client Record """
-	def __init__(self, client_id, client_secret, fingerprint, ip_address, devmode=False, logging=False, proxies=None, cert=None):
+	def __init__(self, client_id, client_secret, fingerprint, ip_address, devmode=False, logging=False, proxies=None, verify=None):
 		"""
 		Args:
 			client_id (str): API client id
@@ -40,7 +40,7 @@ class Client():
 				'https://api.synapsefi.com/v3.1',
 			logging=logging,
 			proxies=proxies,
-			cert=cert,
+			verify=verify,
 		)
 		self.logging = logging
 		self.logger = self.get_log(logging)

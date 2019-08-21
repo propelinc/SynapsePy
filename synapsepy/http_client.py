@@ -7,7 +7,7 @@ from . import errors as api_errors
 class HttpClient():
 	"""Handles HTTP requests (including headers) and API errors.
 	"""
-	def __init__(self, client_id, client_secret, fingerprint, ip_address, base_url, logging, proxies=None, cert=None):
+	def __init__(self, client_id, client_secret, fingerprint, ip_address, base_url, logging, proxies=None, verify=None):
 		self.client_id = client_id
 		self.client_secret = client_secret
 		self.fingerprint = fingerprint
@@ -19,7 +19,8 @@ class HttpClient():
 		self.session = requests.Session()
 		if proxies is not None:
 			self.session.proxies = proxies
-		self.session.cert = cert
+		if verify is not None:
+			self.session.verify = verify
 
 		self.logger = self.get_log(logging)
 
