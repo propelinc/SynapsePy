@@ -501,7 +501,7 @@ class User():
 		response = self._do_request(self.http.patch, path, body)
 		return response
 
-	def dispute_trans(self, node_id, trans_id, dispute_reason):
+	def dispute_trans(self, node_id, trans_id, dispute_reason, meta=None):
 		'''Disputes a transaction
 		Args:
 			node_id (str): ID of the from Node
@@ -525,6 +525,8 @@ class User():
 		)
 
 		body = { 'dispute_reason': dispute_reason }
+		if meta:
+		    body['dispute_meta'] = meta
 		response = self._do_request(self.http.patch, path, body)
 		return response
 
